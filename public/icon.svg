@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#080b14"/>
+    </radialGradient>
+    <radialGradient id="center" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#92400e"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </radialGradient>
+    <radialGradient id="petal" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </radialGradient>
+  </defs>
+  <rect width="180" height="180" rx="38" ry="38" fill="url(#bg)"/>
+  <circle cx="90" cy="88" r="52" fill="#F59E0B" opacity="0.07"/>
+  <g transform="translate(90,88)">
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(45)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(90)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(135)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(180)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(225)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(270)"/>
+    <ellipse cx="0" cy="-44" rx="9" ry="18" fill="url(#petal)" opacity="0.95" transform="rotate(315)"/>
+  </g>
+  <circle cx="90" cy="88" r="22" fill="url(#center)"/>
+  <circle cx="90" cy="88" r="19" fill="none" stroke="#92400e" stroke-width="1.5" opacity="0.4"/>
+  <text x="90" y="152" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="bold" letter-spacing="4" fill="#FDE68A" opacity="0.9">FLOW</text>
+</svg>
