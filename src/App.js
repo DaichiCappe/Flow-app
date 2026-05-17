@@ -699,7 +699,7 @@ function WidgetView({ health, finance, habits, projects, onUpdateHabits, onUpdat
 }
 
 // ── DASHBOARD ────────────────────────────────────────────────────────────────
-function DashboardHome({ health, finance, habits, projects, onNavigate }) {
+function DashboardHome({ health, finance, habits, projects, onNavigate, synced }) {
   const fs = calcFormScore(health), sc = scoreColor(fs);
   const totalRec = finance.recurring.reduce((a,b)=>a+b.amount,0), dispo = finance.salaire-totalRec;
   const totalSpent = finance.expenses.reduce((a,b)=>a+b.amount,0), bjr = (dispo-totalSpent)/DAYS_LEFT;
@@ -713,6 +713,7 @@ function DashboardHome({ health, finance, habits, projects, onNavigate }) {
       <div>
         <div style={{ fontSize: 11, color: "#6b7280" }}>Dimanche 17 mai</div>
         <div style={{ fontFamily: "'Syne',sans-serif", fontSize: 26, fontWeight: 800, letterSpacing: "-0.03em" }}>Bonjour 👋</div>
+        {synced && <div style={{ fontSize: 10, color: "#6EE7B7", marginTop: 2 }}>🔗 Garmin synchronisé</div>}
       </div>
       <div onClick={() => onNavigate("widget")} style={{ background: "#1f2937", border: "1px solid #374151", borderRadius: 14, padding: "8px 12px", cursor: "pointer", textAlign: "center" }}>
         <div style={{ fontSize: 16 }}>⊟</div>
@@ -802,10 +803,29 @@ function DashboardHome({ health, finance, habits, projects, onNavigate }) {
   </div>;
 }
 
+// ── LECTURE DONNÉES GARMIN VIA URL ────────────────────────────────────────────
+function readGarminData() {
+  const params = new URLSearchParams(window.location.search);
+  const data = {};
+  if (params.get("hr")) data.restingHR = Math.round(parseFloat(params.get("hr")));
+  if (params.get("hrv")) data.hrv = Math.round(parseFloat(params.get("hrv")));
+  if (params.get("steps")) data.steps = Math.round(parseFloat(params.get("steps")));
+  if (params.get("spo2")) data.spo2 = Math.round(parseFloat(params.get("spo2")));
+  if (params.get("sleep")) data.sleep = { ...INIT.health.sleep, duration: Math.round(parseFloat(params.get("sleep")) * 10) / 10 };
+  if (params.get("bb")) data.bodyBattery = Math.round(parseFloat(params.get("bb")));
+  if (params.get("stress")) data.stress = Math.round(parseFloat(params.get("stress")));
+  if (params.get("calories")) data.calories = Math.round(parseFloat(params.get("calories")));
+  if (params.get("bedtime")) data.sleep = { ...(data.sleep || INIT.health.sleep), bedtime: params.get("bedtime") };
+  if (params.get("wake")) data.sleep = { ...(data.sleep || INIT.health.sleep), wake: params.get("wake") };
+  return Object.keys(data).length > 0 ? { ...INIT.health, ...data } : null;
+}
+
 // ── APP ───────────────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState("dashboard");
-  const [health] = useState(INIT.health);
+  const garminData = readGarminData();
+  const [health, setHealth] = useState(garminData || INIT.health);
+  const [synced] = useState(!!garminData);
   const [habits, setHabits] = useState(INIT.habits);
   const [finance, setFinance] = useState(INIT.finance);
   const [projects, setProjects] = useState(INIT.projects);
@@ -834,7 +854,7 @@ export default function App() {
       </div>
     </div>}
 
-    {screen === "dashboard" && <DashboardHome health={health} finance={finance} habits={habits} projects={projects} onNavigate={setScreen} />}
+    {screen === "dashboard" && <DashboardHome health={health} finance={finance} habits={habits} projects={projects} onNavigate={setScreen} synced={synced} />}
     {screen === "health" && <HealthModule health={health} habits={habits} onUpdateHabits={setHabits} />}
     {screen === "finance" && <FinanceModule finance={finance} onUpdate={setFinance} />}
     {screen === "projects" && <ProjectsModule projects={projects} onUpdate={setProjects} />}
@@ -848,4 +868,3 @@ export default function App() {
     </div>
   </div>;
 }
-
